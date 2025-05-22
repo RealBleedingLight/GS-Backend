@@ -1,3 +1,9 @@
+const cors = require('cors');  // ⬅️ Add this at the top
+
+const app = express();
+app.use(cors());               // ⬅️ Allow all origins
+
+
 const express = require('express');
 const fs = require('fs');
 const fetchClues = require('./fetch_clues');
