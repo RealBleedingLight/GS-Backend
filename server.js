@@ -1,3 +1,4 @@
+const uploadClues = require('./upload_clues');
 const express = require('express');   // ✅ Require express first
 const cors = require('cors');         // ✅ Then cors
 const fs = require('fs');
