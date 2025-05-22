@@ -1,24 +1,30 @@
-const cors = require('cors');  // ⬅️ Add this at the top
-
-const app = express();
-app.use(cors());               // ⬅️ Allow all origins
-
-
-const express = require('express');
+const express = require('express');   // ✅ Require express first
+const cors = require('cors');         // ✅ Then cors
 const fs = require('fs');
 const fetchClues = require('./fetch_clues');
+
+const app = express();                // ✅ Now it's safe to use express()
+app.use(cors());                      // ✅ CORS applied
 
 const PORT = process.env.PORT || 3000;
 
 app.get('/clues.json', (req, res) => {
-  const data = fs.readFileSync('./data/clues.json', 'utf-8');
-  res.setHeader('Content-Type', 'application/json');
-  res.send(data);
+  try {
+    const data = fs.readFileSync('./data/clues.json', 'utf-8');
+    res.setHeader('Content-Type', 'application/json');
+    res.send(data);
+  } catch (err) {
+    res.status(500).send({ error: "clues.json not found" });
+  }
 });
 
 app.get('/refresh', async (req, res) => {
-  await fetchClues();
-  res.send({ status: 'refreshed' });
+  try {
+    await fetchClues();
+    res.send({ status: 'refreshed' });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 });
 
 app.listen(PORT, () => {
