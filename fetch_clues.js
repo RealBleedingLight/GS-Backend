@@ -18,7 +18,7 @@ async function fetchClues() {
       const props = page.properties;
 
       const countryCode = props["Country Code"]?.title?.[0]?.plain_text?.trim() || '';
-      const countryName = props["Country Name 2"]?.select?.name?.trim() || '';
+      const countryName = props["Country Name"]?.select?.name?.trim() || '';
       const feature = props["Feature"]?.select?.name?.trim() || '';
       const clue = props["Clue"]?.rich_text?.[0]?.plain_text?.trim() || props["Clue"]?.plain_text?.trim() || '';
       const image = props["Image URL"]?.url || props["Image URL"]?.rich_text?.[0]?.plain_text || '';
