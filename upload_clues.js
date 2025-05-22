@@ -31,4 +31,8 @@ async function uploadClues() {
   }
 }
 
-uploadClues();
+if (require.main === module) {
+  uploadClues();
+}
+
+module.exports = uploadClues; // ✅ Export for server.js
