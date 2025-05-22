@@ -4,8 +4,8 @@ const cors = require('cors');         // ✅ Then cors
 const fs = require('fs');
 const fetchClues = require('./fetch_clues');
 
-const app = express();                // ✅ Now it's safe to use express()
-app.use(cors());                      // ✅ CORS applied
+const app = express();
+app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,12 +21,20 @@ app.get('/clues.json', (req, res) => {
 
 app.get('/refresh', async (req, res) => {
   try {
-    await fetchClues();
-    res.send({ status: 'refreshed' });
+    await fetchClues();         // ✅ Step 1: Fetch from Notion
+    await uploadClues();        // ✅ Step 2: Upload to Supabase
+    res.send({ status: '✅ Refreshed and uploaded to Supabase' });
   } catch (err) {
+    console.error('❌ Refresh failed:', err.message);
     res.status(500).send({ error: err.message });
   }
 });
+
+// Optional: auto-refresh once on startup
+fetchClues()
+  .then(() => uploadClues())
+  .then(() => console.log('✅ Initial sync completed'))
+  .catch(err => console.error('❌ Initial sync failed:', err));
 
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
